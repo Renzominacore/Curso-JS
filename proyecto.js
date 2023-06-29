@@ -1,72 +1,43 @@
+const productos = [
+    { nombre: "Estetoscopio", precio: 49000, marca: "Littmann" },
+    { nombre: "Tensiómetro", precio: 25000, marca: "Omron" },
+    { nombre: "Oxímetro", precio: 19500, marca: "Yonker" },
+    { nombre: "Termómetro", precio: 7300, marca: "Philco" },
+    { nombre: "PinzasQuirurgicas", precio: 14670, marca: "ARTMAN" }
+];
 
-const estetoscopio = 1;
-const tensiometro = 2;
-const oximetro = 3;
-const termometro = 4;
-const pinzasQuirurgicas = 5;
-let precioEstetoscopio=49000;
-let precioTensiometro= 25000;
-let precioOximetro= 19500;
-let precioTermometro=7300;
-let precioPinzas= 14670;
-let total = 0;
+const detalleFactura = []; 
+
+let cantidad;
+//let total = 0;
 let opcion;
-let terminarCompra;
-let nombre;
-nombre=prompt('Por favor, indique su nombre');
-bienvenida(nombre);
+let agregar;
+let nombrePersona;
+
+nombrePersona=prompt('Por favor, indique su nombre');
+bienvenida(nombrePersona);
 function bienvenida (nombreCliente){
     alert ('Bienvenido '+nombreCliente+' a SAS insumos medicos');
 }
-function productos(totalProducto, costo, cantidad) {
-   return totalProducto + costo * cantidad;
-}
+
 do {
-    opcion = parseInt(prompt("Elija sus productos: 1.Estetoscopio 2.Tensiometro 3.Oximetro 4.Termometro 5.PinzasQuirurgicas "));
-    switch (opcion) {
-        case estetoscopio:
-            cantidadProducto = parseInt(prompt("El costo del Estetoscopio es de $49.000, ingrese la cantidad deseada"));
-            while (cantidadProducto <= 0) {
-                cantidadProducto = parseInt(prompt('Cantidad invalida, ingrese otra'));
-            } 
-            total = productos(total, precioEstetoscopio,cantidadProducto);
-            alert(total);
-            break;
-        case tensiometro:
-            cantidadProducto = parseInt(prompt("El costo del Tensiometro es de $25.000, ingrese la cantidad deseada"));
-            while (cantidadProducto <= 0) {
-                cantidadProducto = parseInt(prompt('Cantidad invalida, ingrese otra'));
-            } 
-            total = productos(total, precioTensiometro,cantidadProducto);
-            alert(total);
-            break;
-        case oximetro:
-            cantidadProducto = parseInt(prompt("El costo del Oximetro es de $19500, ingrese la cantidad deseada"));
-            while (cantidadProducto <= 0) {
-                cantidadProducto = parseInt(prompt('Cantidad invalida, ingrese otra'));
-            } 
-            total = productos(total, precioOximetro,cantidadProducto);
-            alert(total);
-            break;
-        case termometro:
-            cantidadProducto = parseInt(prompt("El costo del Termometro es de $7300, ingrese la cantidad deseada"));
-            while (cantidadProducto <= 0) {
-                cantidadProducto = parseInt(prompt('Cantidad invalida, ingrese otra'));
-            } 
-            total = productos(total, precioTermometro,cantidadProducto);
-            alert(total);
-            break;
-        case pinzasQuirurgicas:
-            cantidadProducto = parseInt(prompt("El costo de las Pinzas quirurgicas es de $14670, ingrese la cantidad deseada"));
-            while (cantidadProducto <= 0) {
-                cantidadProducto = parseInt(prompt('Cantidad invalida, ingrese otra'));
-            }  
-            total = productoTienda(total, precioPinzas,cantidadProducto);
-            alert(total);
-            break;
-        default:
-            alert("Ingrese una opcion valida, por favor")
+    const listaStringProductos = productos.map(
+        (product, index) => `${index + 1}: ${product.nombre} precio: ${product.precio}`);
+    opcion = parseInt(
+        prompt("Que producto desea elegir?" + "\n" + listaStringProductos.join('\n')));
+    while (opcion <= 0 || opcion > productos.length) {
+        opcion=parseInt(prompt("Por favor, ingrese una opcion válida" + "\n" + listaStringProductos.join('\n')));
     }
-    terminarCompra = prompt("desea continuar? si/no")
-} while (terminarCompra == "si")
-alert("El total de su compra es de: "+total+"");
+    cantidad = parseInt(prompt("Ingrese la cantidad que desea"));
+    while(cantidad<=0){
+        cantidad = parseInt(prompt('Cantidad invalida, ingrese otra'));
+    }
+    detalleFactura.push({
+        nombre: productos[opcion-1].nombre, 
+        precioUnitario: productos[opcion-1].precio, 
+        cantidad, 
+        subtotal: productos[opcion - 1].precio*cantidad});
+    agregar = prompt("Deseas agregar mas productos? si/no")
+} while (agregar == "si")
+total = detalleFactura.reduce((acc, itemFactura) => acc + itemFactura.precioUnitario*itemFactura.cantidad, 0); 
+alert("El total de su compra es de: $" + total)
