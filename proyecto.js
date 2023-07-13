@@ -1,43 +1,115 @@
-const productos = [
-    { nombre: "Estetoscopio", precio: 49000, marca: "Littmann" },
-    { nombre: "Tensiómetro", precio: 25000, marca: "Omron" },
-    { nombre: "Oxímetro", precio: 19500, marca: "Yonker" },
-    { nombre: "Termómetro", precio: 7300, marca: "Philco" },
-    { nombre: "PinzasQuirurgicas", precio: 14670, marca: "ARTMAN" }
-];
 
-const detalleFactura = []; 
+let carrito = [] 
+let stock = [{ nombre:"Estetoscopio", precio: 49000, marca: "Littmann" },
+{nombre:"Tensiómetro", precio: 25000, marca: "Omron" },
+{nombre:"Oxímetro", precio: 19500, marca: "Yonker" },
+{nombre:"Termómetro", precio: 7300, marca: "Philco" },
+{nombre:"PinzasQuirurgicas", precio: 14670, marca: "ARTMAN" },
+{nombre:"Oximetro",precio: 18000, marca: "Beurer"},
+{nombre:"Termometro",precio:7600, marca:"Buerer"},
+{nombre:"Estetoscopio",precio:10000, marca:"Meliphal"},
+{nombre:"Tensiometro",precio:24300,marca:"Medisana"}
+]
+ 
+localStorage.setItem('stock',JSON.stringify(stock));
+ 
+const tabla = document.getElementById('items');
+const selectProductos = document.getElementById('productos');
+const btnAgregar = document.getElementById('agregar');
+const btnOrdenar = document.getElementById('ordenar');
+const btnVaciar = document.getElementById('vaciar');
+const total = document.getElementById('total');
 
-let cantidad;
-//let total = 0;
-let opcion;
-let agregar;
-let nombrePersona;
-
-nombrePersona=prompt('Por favor, indique su nombre');
-bienvenida(nombrePersona);
-function bienvenida (nombreCliente){
-    alert ('Bienvenido '+nombreCliente+' a SAS insumos medicos');
+function traerItems()
+{
+    stock = JSON.parse(localStorage.getItem('stock')) || [];
+    carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+  popularDropdown();
 }
 
-do {
-    const listaStringProductos = productos.map(
-        (product, index) => `${index + 1}: ${product.nombre} precio: ${product.precio}`);
-    opcion = parseInt(
-        prompt("Que producto desea elegir?" + "\n" + listaStringProductos.join('\n')));
-    while (opcion <= 0 || opcion > productos.length) {
-        opcion=parseInt(prompt("Por favor, ingrese una opcion válida" + "\n" + listaStringProductos.join('\n')));
+function popularDropdown()
+{
+  stock.forEach(({nombre,precio,marca},index) => {
+    let option = document.createElement('option');
+    option.textContent = `${nombre}: ${precio}, marca: ${marca}`;
+    option.value = index;
+    selectProductos.appendChild(option);
+  });
+}
+
+function actualizarTablaCarrito()
+{
+  tabla.innerHTML = '';
+  total.innerText = 0;
+  carrito.forEach((item,index) => {
+    newRow(item,index);
+  });
+}
+
+function newRow(item,index)
+{
+  const row = document.createElement('tr'); 
+  let td = document.createElement('td');
+
+  td.classList.add();
+  td.textContent = item.producto.nombre;
+  row.appendChild(td);
+  
+  td.classList.add();
+  td = document.createElement('td');
+  td.textContent = item.cantidad;
+  row.appendChild(td);
+
+  td.classList.add();
+  td = document.createElement('td');
+  td.textContent = item.producto.precio;
+  row.appendChild(td);
+
+  td.classList.add();
+  td = document.createElement('td');
+  td.textContent = item.producto.marca;
+  row.appendChild(td);
+  td = document.createElement('td');
+  const btnEliminar = document.createElement('button');
+  btnEliminar.classList.add('btn', 'btn-danger');
+  btnEliminar.textContent = 'Remove';
+
+  btnEliminar.onclick = () => {
+      carrito.splice(index,1);
+      actualizarTablaCarrito();
+      localStorage.setItem('carrito',JSON.stringify(carrito));
+  }
+
+  td.appendChild(btnEliminar);
+  row.appendChild(td);
+  tabla.appendChild(row);
+
+  total.textContent = carrito.reduce((acc,item) => acc + item.producto.precio * item.cantidad, 0);
+}
+
+function allEventListeners()
+{
+  document.addEventListener('DOMContentLoaded', traerItems);
+
+  btnAgregar.addEventListener('submit', (e) =>
+  {
+    e.preventDefault(); 
+    const productoSeleccionado = stock[+selectProductos.value]; 
+    const indiceCarrito = carrito.findIndex((item) => item.producto.nombre === productoSeleccionado.nombre);
+    
+
+    if (indiceCarrito !== -1) { 
+        carrito[indiceCarrito].cantidad++; 
+    }else {
+      const item = new Item(productoSeleccionado,1);
+      carrito.push(item);
     }
-    cantidad = parseInt(prompt("Ingrese la cantidad que desea"));
-    while(cantidad<=0){
-        cantidad = parseInt(prompt('Cantidad invalida, ingrese otra'));
-    }
-    detalleFactura.push({
-        nombre: productos[opcion-1].nombre, 
-        precioUnitario: productos[opcion-1].precio, 
-        cantidad, 
-        subtotal: productos[opcion - 1].precio*cantidad});
-    agregar = prompt("Deseas agregar mas productos? si/no")
-} while (agregar == "si")
-total = detalleFactura.reduce((acc, itemFactura) => acc + itemFactura.precioUnitario*itemFactura.cantidad, 0); 
-alert("El total de su compra es de: $" + total)
+
+    actualizarTablaCarrito();
+    localStorage.setItem('carrito',JSON.stringify(carrito));
+    
+  });
+}
+allEventListeners();
+
+
