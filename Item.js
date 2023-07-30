@@ -1,12 +1,17 @@
 class Item
 {
-  producto;
-  cantidad;
-
-    constructor(producto, cantidad)
+    imagen;
+    titulo;
+    precio;
+    id;
+    cantidad;
+    
+    constructor(imagen,precio,titulo,id,cantidad)
     {
-        this.producto = producto;
+        this.imagen=imagen
+        this.titulo=titulo
+        this.precio=precio
+        this.id=id
         this.cantidad=cantidad;
-
     }
 }

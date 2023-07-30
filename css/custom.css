@@ -1,0 +1,55 @@
+html {
+    font-size: 62.5%;
+}
+
+h1 {
+    font-size: 4rem;
+}
+
+.borrar-item {
+    background-color: rgb(209, 125, 14);
+    border-radius: 50%;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+}
+
+ul {
+    list-style: none;
+}
+
+
+.submenu {
+    position: relative;
+}
+
+.submenu #carrito{
+    display: none;
+}
+.submenu:hover #carrito{
+    display: block;
+    position: absolute;
+    right:0;
+
+    top:100%;
+    z-index: 1;
+    background-color: white;
+    padding: 20px;
+    min-height: 400px;
+    min-width: 300px;
+}
+
+#lista-carrito .row {
+    margin-bottom:20px;
+}
+.agregar-carrito {
+    margin:10px 0;
+}
+
+.card {
+    width: 60%;
+        height: 60%;
+        object-fit: cover;
+        border-radius: 20px;
+}

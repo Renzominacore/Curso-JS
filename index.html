@@ -1,75 +1,63 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
-    <link href="./css/style.css" rel="stylesheet"> 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    <title>SAS Clinica Medica - Carrito</title>
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SAS Clinica Medica</title>
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/skeleton.css">
+    <link rel="stylesheet" href="./css/custom.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
+<body class="body">
+<header id="header" class="header">
+    <div class="container">
+        <div class="row">
+            <div class="four columns">
+                <img src="./img/logo.png" id="logo">
+            </div>
+            <div class="two columns u-pull-right">
+                <ul>
+                    <li class="submenu">
+                            <img src="" id="img-carrito">
+                            <div id="carrito">
+                                    
+                                    <table id="lista-carrito" class="u-full-width">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Nombre</th>
+                                                <th>Precio</th>
+                                                <th>Cantidad</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
 
-
-<body>
-    <header class="tituloHeader text-center">
-        <h1>SAS Clinica Medica</h1>
-        <h3>Más de 30 años brindando bienestar</h3>
-    </header>
-    <div class="container m-3 row">
-        <div class="container m-1 col">
-            <form id="agregar">
-                <label for="productos">Por favor, elija sus productos</label>
-
-                <select id="productos" class="form-control"></select>
-                <br>
-                <button id="agregar" class="btn btn-primary">Agregar al carrito</button>
-            </form>
-        </div>
-        <div class="container m-1">
-            <table class="table table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                        <th>Marca</th>
-                        <th>Operacion</th>
-                        
-                    </tr>
-                </thead>
-                <tbody id="items">
-                </tbody>
-                <tfoot class="thead-dark">
-                    <tr>
-                        <th>Total: </th>
-                        <th></th>
-                        <th id="total"></th>
-                        <th></th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-        <!--<div class="container m-1">
-            <button id="ordenar" class="btn btn-primary">
-                Ordenar
-            </button>
-            <button id="vaciar" class="btn btn-primary">
-                Vaciar
-            </button>
-        </div>-->
+                                    <a href="#" id="vaciar-carrito" class="button u-full-width">Vaciar Carrito</a>
+                            </div>
+                    </li>
+                </ul>
+            </div>
+        </div> 
     </div>
-    <script src="Producto.js"></script>
+    </header>
+
+
+    <div id="lista-items" class="container">
+        <h1 id="encabezado" class="encabezado">Productos</h1>
+    </div>  
+
+    <footer id="footer" class="footer">
+        
+    </footer>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="Item.js"></script>
     <script src="proyecto.js"></script>
-</body>
 
+</body>
 </html>

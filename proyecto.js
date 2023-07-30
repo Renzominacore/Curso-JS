@@ -1,115 +1,165 @@
+const contenedor = document.querySelector('#lista-carrito tbody');
+const vaciarCarritobtn = document.querySelector('#vaciar-carrito');
+const listaItems = document.querySelector('#lista-items');
+let imgcarrito = document.getElementById("img-carrito")
 
-let carrito = [] 
-let stock = [{ nombre:"Estetoscopio", precio: 49000, marca: "Littmann" },
+let carritoCompras = [] 
+let productos = [{ nombre:"Estetoscopio", precio: 49000, marca: "Littmann" },
 {nombre:"Tensiómetro", precio: 25000, marca: "Omron" },
 {nombre:"Oxímetro", precio: 19500, marca: "Yonker" },
 {nombre:"Termómetro", precio: 7300, marca: "Philco" },
 {nombre:"PinzasQuirurgicas", precio: 14670, marca: "ARTMAN" },
 {nombre:"Oximetro",precio: 18000, marca: "Beurer"},
-{nombre:"Termometro",precio:7600, marca:"Buerer"},
-{nombre:"Estetoscopio",precio:10000, marca:"Meliphal"},
+{nombre:"Termometro",precio:7600, marca:"Beurer"},
+{nombre:"Estetoscopio",precio:10000, marca:"Melipal"},
 {nombre:"Tensiometro",precio:24300,marca:"Medisana"}
 ]
  
-localStorage.setItem('stock',JSON.stringify(stock));
+cargarEventListeners();
+
+
+function cargarEventListeners() {
+    
+    listaItems.addEventListener('click', agregarProducto);
+    vaciarCarritobtn.addEventListener('click', vaciarCarrito);
+
+    
+    document.addEventListener('DOMContentLoaded', async () => {
+        
+        await traerProductos();
+        dibujarProductos();
+        carritoCompras = JSON.parse(localStorage.getItem('carrito')) || [];
+        refreshCarrito();
+    });
+
+}
+async function traerProductos() { 
+  const response = await fetch('productos.json');
+  if (response.ok) {
+    productos = await response.json();
+    console.log(productos);
+  } else {
+       Toastify({
+           text: 'Hubo un problema en el servidor, intente nuevamente',
+           className: "Error"
+       }).showToast();
+  }
+}
+
+function dibujarProductos() {
+   let row = document.createElement('div');
+   row.classList.add('row');
+   row.innerHTML = ``;
+   let counter = 1;
+   console.log(productos);
+  productos.forEach((producto) => {
+    if (counter <= 3) {
+       row.innerHTML += `
+           <div class="four columns">
+               <div class="card">
+                   <img src="${producto.image}" class="imagen-item u-full-width">
+                   <div class="info-card">
+                       <h4>${producto.nombre}</h4>
+                       <p>${producto.marca}</p>
+                       <p class="precio">$${producto.precio}</p>
+                       <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="${producto.id}">Agregar Al Carrito</a>
+                   </div>
+               </div>
+           </div>
+       `;
+       counter++;
+    } else {
+       listaItems.appendChild(row);
+       row = document.createElement('div');
+       row.classList.add('row');
+       row.innerHTML = ``;
+       counter=1;
+    } 
+  });
+  listaItems.appendChild(row);
+}
+function agregarProducto(e) {
+  if (e.target.classList.contains('agregar-carrito')) { 
+      e.preventDefault();
+      const id = e.target.dataset.id; 
+      const producto = productos.find((product) => product.id === +id);
+      if (producto) {
+          agregarItem(producto);
+      }
+  }
+}
+function agregarItem({image, precio, nombre, id,}) {
+  const index = carritoCompras.findIndex(item => item.id === id);
+  if (index !== -1) { 
+      carritoCompras[index].cantidad += 1;
+  }
+  else {
+      const item = new Item(image,precio,nombre,id,1);
+      carritoCompras.push(item);
  
-const tabla = document.getElementById('items');
-const selectProductos = document.getElementById('productos');
-const btnAgregar = document.getElementById('agregar');
-const btnOrdenar = document.getElementById('ordenar');
-const btnVaciar = document.getElementById('vaciar');
-const total = document.getElementById('total');
-
-function traerItems()
-{
-    stock = JSON.parse(localStorage.getItem('stock')) || [];
-    carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-  popularDropdown();
+  }
+  refreshCarrito();
 }
 
-function popularDropdown()
-{
-  stock.forEach(({nombre,precio,marca},index) => {
-    let option = document.createElement('option');
-    option.textContent = `${nombre}: ${precio}, marca: ${marca}`;
-    option.value = index;
-    selectProductos.appendChild(option);
-  });
-}
+function refreshCarrito() {
 
-function actualizarTablaCarrito()
-{
-  tabla.innerHTML = '';
-  total.innerText = 0;
-  carrito.forEach((item,index) => {
-    newRow(item,index);
-  });
-}
-
-function newRow(item,index)
-{
-  const row = document.createElement('tr'); 
-  let td = document.createElement('td');
-
-  td.classList.add();
-  td.textContent = item.producto.nombre;
-  row.appendChild(td);
   
-  td.classList.add();
-  td = document.createElement('td');
-  td.textContent = item.cantidad;
-  row.appendChild(td);
-
-  td.classList.add();
-  td = document.createElement('td');
-  td.textContent = item.producto.precio;
-  row.appendChild(td);
-
-  td.classList.add();
-  td = document.createElement('td');
-  td.textContent = item.producto.marca;
-  row.appendChild(td);
-  td = document.createElement('td');
-  const btnEliminar = document.createElement('button');
-  btnEliminar.classList.add('btn', 'btn-danger');
-  btnEliminar.textContent = 'Remove';
-
-  btnEliminar.onclick = () => {
-      carrito.splice(index,1);
-      actualizarTablaCarrito();
-      localStorage.setItem('carrito',JSON.stringify(carrito));
+  limpiarHTML();
+  sincronizarCarrito();
+  if (carritoCompras.length == 0)
+  {
+      imgcarrito.setAttribute('src',"img/carritovacio2.png")
+  }
+  else
+  {
+      imgcarrito.setAttribute('src',"img/carritolleno2.png")
+      carritoCompras.forEach((element) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+      <td>
+          <img src="${element.imagen}" width="100">
+      </td>
+      <td>
+       ${element.titulo}
+      </td>
+      <td>
+       ${element.precio}
+       </td>
+       <td>
+       ${element.cantidad}
+       </td>
+       <td>
+        <a href="#" class="borrar-item" data-id="${element.id}"> X </a>
+       </td>
+     `;
+      contenedor.appendChild(row);
+      row.querySelector("a").addEventListener('click', borrarItem);
+  });
   }
 
-  td.appendChild(btnEliminar);
-  row.appendChild(td);
-  tabla.appendChild(row);
-
-  total.textContent = carrito.reduce((acc,item) => acc + item.producto.precio * item.cantidad, 0);
 }
 
-function allEventListeners()
+function vaciarCarrito() {
+  carritoCompras = [];
+  limpiarHTML();
+  refreshCarrito();
+}
+
+function limpiarHTML() {
+
+  contenedor.innerHTML = '';
+
+}
+function sincronizarCarrito()
 {
-  document.addEventListener('DOMContentLoaded', traerItems);
-
-  btnAgregar.addEventListener('submit', (e) =>
-  {
-    e.preventDefault(); 
-    const productoSeleccionado = stock[+selectProductos.value]; 
-    const indiceCarrito = carrito.findIndex((item) => item.producto.nombre === productoSeleccionado.nombre);
-    
-
-    if (indiceCarrito !== -1) { 
-        carrito[indiceCarrito].cantidad++; 
-    }else {
-      const item = new Item(productoSeleccionado,1);
-      carrito.push(item);
-    }
-
-    actualizarTablaCarrito();
-    localStorage.setItem('carrito',JSON.stringify(carrito));
-    
-  });
+  localStorage.setItem('carrito',JSON.stringify(carritoCompras));
 }
-allEventListeners();
+
+function borrarItem(e) {
+  const element = e.target;
+  element.remove(); 
+  carritoCompras = carritoCompras.filter(e => e.id != element.getAttribute("data-id"));
+  refreshCarrito();
+}
 
 

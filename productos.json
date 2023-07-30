@@ -1,0 +1,65 @@
+[
+    {
+        "id": 1,
+        "image":"img/estetoscopioLittmann.webp",
+        "nombre": "Estetoscopio",
+        "marca": "Littmann",
+        "precio": 49000
+    },
+    {
+        "id": 2,
+        "image":"img/tensiometroOmron.jpg",
+        "nombre": "Tensiometro",
+        "marca": "Omron",
+        "precio": 25000
+    },
+    {
+        "id": 3,
+        "image":"img/oximetroYonker.jpg",
+        "nombre": "Oximetro",
+        "marca": "Yonker",
+        "precio": 19500
+    },
+    {
+        "id": 4,
+        "image":"img/termometroPhilco.jpg",
+        "nombre": "Termometro",
+        "marca": "Philco",
+        "precio": 7300
+    },
+    {
+        "id": 5,
+        "image":"img/pinzasArtman.jpg",
+        "nombre": "Pinzas Quirurgicas",
+        "marca": "Artman",
+        "precio": 14670
+    },
+    {
+        "id": 6,
+        "image":"img/oximetroBeurer.jpg",
+        "nombre": "Oximetro",
+        "marca": "Beurer",
+        "precio": 18000
+    },
+    {
+        "id": 7,
+        "image":"img/termometroBeurer.jpg",
+        "nombre": "Termometro",
+        "marca": "Beurer",
+        "precio": 7600
+    },
+    {
+        "id": 8,
+        "image":"img/estetoscopioMelipal.jpg",
+        "nombre": "Estetoscopio",
+        "marca": "Melipal",
+        "precio": 10000
+    },
+    {
+        "id": 9,
+        "image":"img/tensiometroMedisana.jpg",
+        "nombre": "Tensiometro",
+        "marca": "Medisana",
+        "precio": 24300
+    }
+]
