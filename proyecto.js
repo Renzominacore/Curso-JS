@@ -2,18 +2,10 @@ const contenedor = document.querySelector('#lista-carrito tbody');
 const vaciarCarritobtn = document.querySelector('#vaciar-carrito');
 const listaItems = document.querySelector('#lista-items');
 let imgcarrito = document.getElementById("img-carrito")
+const pagarCarritobtn=document.getElementById("pagarCarrito")
 
 let carritoCompras = [] 
-let productos = [{ nombre:"Estetoscopio", precio: 49000, marca: "Littmann" },
-{nombre:"Tensiómetro", precio: 25000, marca: "Omron" },
-{nombre:"Oxímetro", precio: 19500, marca: "Yonker" },
-{nombre:"Termómetro", precio: 7300, marca: "Philco" },
-{nombre:"PinzasQuirurgicas", precio: 14670, marca: "ARTMAN" },
-{nombre:"Oximetro",precio: 18000, marca: "Beurer"},
-{nombre:"Termometro",precio:7600, marca:"Beurer"},
-{nombre:"Estetoscopio",precio:10000, marca:"Melipal"},
-{nombre:"Tensiometro",precio:24300,marca:"Medisana"}
-]
+let productos = []
  
 cargarEventListeners();
 
@@ -22,7 +14,7 @@ function cargarEventListeners() {
     
     listaItems.addEventListener('click', agregarProducto);
     vaciarCarritobtn.addEventListener('click', vaciarCarrito);
-
+    pagarCarritobtn.addEventListener('click', pagarCarrito);
     
     document.addEventListener('DOMContentLoaded', async () => {
         
@@ -161,5 +153,26 @@ function borrarItem(e) {
   carritoCompras = carritoCompras.filter(e => e.id != element.getAttribute("data-id"));
   refreshCarrito();
 }
+
+
+function pagarCarrito() {
+  Swal.fire({
+    title: 'Desea comprar los items del carrito?',
+    confirmButtonText: 'Si',
+    showCancelButton: true,
+    cancelButtonText: 'No, salir!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      carritoCompras = [];
+      localStorage.setItem('carrito', JSON.stringify(carritoCompras));
+      refreshCarrito();
+      Swal.fire({
+        title:'Compra realizada!',
+        icon:'success'
+      });
+    }
+  });
+}
+
 
 
